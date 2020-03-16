@@ -56,6 +56,21 @@ module "db" {
 }
 ```
 
+## Conditional creation
+
+Sometimes you need to have a way to create RDS Aurora resources conditionally but Terraform does not allow to use `count` inside `module` block, so the solution is to specify argument `create_cluster`.
+
+```hcl
+# This RDS cluster will not be created
+module "db" {
+  source  = "terraform-aws-modules/rds-aurora/aws"
+  version = "~> 2.0"
+
+  create_cluster = false
+  # ... omitted
+}
+```
+
 ## Examples
 
 - [PostgreSQL](examples/postgresql): A simple example with VPC and PostgreSQL cluster.
@@ -87,6 +102,7 @@ Terraform documentation is generated automatically using [pre-commit hooks](http
 | backup\_retention\_period | How long to keep backups for (in days) | `number` | `7` | no |
 | ca\_cert\_identifier | The identifier of the CA certificate for the DB instance | `string` | `"rds-ca-2019"` | no |
 | copy\_tags\_to\_snapshot | Copy all Cluster tags to snapshots. | `bool` | `false` | no |
+| create\_cluster | Controls if RDS cluster should be created (it affects almost all resources) | `bool` | `true` | no |
 | create\_security\_group | Whether to create security group for RDS cluster | `bool` | `true` | no |
 | database\_name | Name for an automatically created database on cluster creation | `string` | `""` | no |
 | db\_cluster\_parameter\_group\_name | The name of a DB Cluster parameter group to use | `string` | n/a | yes |
